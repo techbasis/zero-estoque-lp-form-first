@@ -516,7 +516,7 @@ export default function Home() {
             >
               <div className="mb-4 inline-block">
                 <span className="rounded-full border border-red-500/20 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 sm:px-4 sm:py-2 sm:text-sm">
-                  POR QUE SEU MARKETING NÃO FUNCIONOU ANTES
+                  POR QUE SEU MARKETING NÃO FUNCIONOU ANTES?
                 </span>
               </div>
               <h2 className="mb-4 text-2xl font-bold tracking-tight text-white sm:text-3xl lg:text-4xl">

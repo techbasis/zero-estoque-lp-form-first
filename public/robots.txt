@@ -1,0 +1,18 @@
+# robots.txt para BASIS Aceleradora
+# Permitir acesso total aos crawlers do Google
+
+User-agent: *
+Allow: /
+
+# Bloquear crawlers indesejados (opcional)
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+# Sitemap
+Sitemap: https://basisaceleradora.com.br/sitemap.xml
+
+# Crawl-delay para proteger o servidor
+Crawl-delay: 1

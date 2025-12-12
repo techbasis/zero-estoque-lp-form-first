@@ -68,22 +68,19 @@ function buildMarketingPayload(formData: FormData) {
 
 function buildCRMPayload(formData: FormData) {
   return {
-    name: `${formData.name} - ${formData.company}`,
-    deal_stage_id: 'Lead frio',
+    deal: {
+      name: `${formData.name} - ${formData.company}`,
+      deal_stage_id: process.env.RD_STATION_DEAL_STAGE_ID || '', // ID do stage "Lead frio"
+    },
     contacts: [
       {
         name: formData.name,
-        email: formData.email,
+        emails: [{ email: formData.email }],
         phones: [{ phone: formData.phone }],
       },
     ],
     organization: {
       name: formData.company,
-    },
-    custom_fields: {
-      cargo: formData.role,
-      volume_vendas: formData.salesVolume,
-      orcamento_marketing: formData.marketingBudget,
     },
   }
 }
@@ -143,22 +140,24 @@ async function sendToRDStationCRM(
   try {
     const payload = buildCRMPayload(formData)
 
-    console.log('[BASIS] 📤 Enviando para RD Station CRM...')
-    console.log('[BASIS] CRM URL:', url)
+    // Adiciona o token como query parameter na URL
+    const urlWithToken = `${url}?token=${token}`
 
-    const response = await fetch(url, {
+    console.log('[BASIS] 📤 Enviando para RD Station CRM...')
+    console.log('[BASIS] CRM URL:', urlWithToken)
+    console.log('[BASIS] CRM Payload:', JSON.stringify(payload, null, 2))
+
+    const response = await fetch(urlWithToken, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
       redirect: 'manual', // Não seguir redirecionamentos
       signal: AbortSignal.timeout(10000), // Timeout de 10 segundos
     })
-
-    console.log('[BASIS] CRM Status:', response.status)
+    console.log('[BASIS] CRM Status:', response)
 
     // Detectar redirecionamentos
     if (response.status >= 300 && response.status < 400) {
@@ -237,6 +236,7 @@ export async function POST(request: Request): Promise<NextResponse<ApiResponse>>
     if (!crmResult.success) {
       // Marketing funcionou, mas CRM falhou - ainda é um sucesso parcial
       console.warn('[BASIS] ⚠️ CRM falhou, mas Marketing funcionou')
+
       return NextResponse.json({
         success: true,
         message: 'Lead enviado com sucesso! (Aviso: CRM não sincronizado)',

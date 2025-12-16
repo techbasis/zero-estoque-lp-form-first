@@ -250,7 +250,7 @@ export default function Home() {
   }
 
   return (
-    <div className="relative min-h-screen bg-black text-white">
+    <div className="relative min-h-screen overflow-x-hidden bg-black text-white">
       <div className="fixed inset-0 z-0">
         <Squares
           direction="diagonal"
@@ -261,7 +261,7 @@ export default function Home() {
         />
       </div>
 
-      <div className="relative z-10">
+      <div className="relative z-10 overflow-x-hidden">
         <header className="fixed top-0 right-0 left-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-md">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between py-3 sm:py-4">
@@ -307,7 +307,7 @@ export default function Home() {
               <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
                 <motion.h1
                   variants={fadeInUp}
-                  className="text-3xl font-bold tracking-tight text-balance text-white sm:text-4xl lg:text-6xl"
+                  className="mt-8 text-3xl font-bold tracking-tight text-balance text-white sm:text-4xl lg:text-6xl"
                 >
                   Carro no pátio não paga boleto,
                   <span className="text-blue-500"> VAMOS VENDER!</span>{' '}
@@ -447,7 +447,7 @@ export default function Home() {
                 className="flex flex-col gap-8 sm:gap-12"
               >
                 {/* Video explicativo */}
-                <motion.div variants={fadeInUp} className="flex justify-center">
+                <motion.div variants={fadeInUp} className="flex justify-center px-8 sm:px-0">
                   <div className="relative aspect-[9/16] w-full max-w-[280px] overflow-visible rounded-lg border-2 border-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.4)] transition-all duration-300 hover:shadow-[0_0_70px_rgba(59,130,246,0.6)] sm:max-w-sm sm:border-4 sm:shadow-[0_0_50px_rgba(59,130,246,0.4)]">
                     <div className="absolute inset-0 overflow-hidden rounded-lg">
                       <video
@@ -498,7 +498,7 @@ export default function Home() {
                 {/* Cards de estatísticas embaixo do vídeo */}
                 <motion.div
                   variants={staggerContainer}
-                  className="mx-[72px] my-0 grid grid-cols-2 gap-3 sm:gap-4"
+                  className="mx-8 my-0 grid grid-cols-2 gap-3 sm:mx-[72px] sm:gap-4"
                 >
                   {[
                     { value: '23+', label: 'Projetos Automotivos' },

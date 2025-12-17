@@ -921,13 +921,13 @@ export default function Home() {
                       <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2">
                         <div className="space-y-2">
                           <Label
-                            htmlFor="name"
+                            htmlFor="form-field-name"
                             className="text-sm font-medium text-white sm:text-base"
                           >
                             Nome Completo *
                           </Label>
                           <Input
-                            id="name"
+                            id="form-field-name"
                             placeholder="Digite seu nome completo"
                             value={formData.name}
                             onChange={(e) => {
@@ -946,13 +946,13 @@ export default function Home() {
                         </div>
                         <div className="space-y-2">
                           <Label
-                            htmlFor="email"
+                            htmlFor="form-field-email"
                             className="text-sm font-medium text-white sm:text-base"
                           >
                             Email Profissional *
                           </Label>
                           <Input
-                            id="email"
+                            id="form-field-email"
                             type="email"
                             placeholder="seu@email.com"
                             value={formData.email}
@@ -972,13 +972,13 @@ export default function Home() {
                         </div>
                         <div className="space-y-2">
                           <Label
-                            htmlFor="phone"
+                            htmlFor="form-field-phone"
                             className="text-sm font-medium text-white sm:text-base"
                           >
                             Telefone / WhatsApp *
                           </Label>
                           <Input
-                            id="phone"
+                            id="form-field-phone"
                             placeholder="(00) 00000-0000"
                             value={formData.phone}
                             onChange={(e) => {
@@ -997,13 +997,13 @@ export default function Home() {
                         </div>
                         <div className="space-y-2">
                           <Label
-                            htmlFor="company"
+                            htmlFor="form-field-company"
                             className="text-sm font-medium text-white sm:text-base"
                           >
                             Nome da Empresa *
                           </Label>
                           <Input
-                            id="company"
+                            id="form-field-company"
                             placeholder="Nome da sua empresa"
                             value={formData.company}
                             onChange={(e) => {
@@ -1038,17 +1038,10 @@ export default function Home() {
                           { value: 'employee', label: 'Vendedor contratado' },
                           { value: 'autonomous', label: 'Vendedor Autônomo' },
                         ].map((role) => (
-                          <button
+                          <label
                             key={role.value}
-                            type="button"
-                            onClick={() => {
-                              setSelectedRole(role.value)
-                              setFormData({ ...formData, role: role.value })
-                              if (formErrors.role) {
-                                setFormErrors({ ...formErrors, role: undefined })
-                              }
-                            }}
-                            className={`rounded-xl border-2 p-4 text-left transition-all duration-300 sm:p-6 ${
+                            htmlFor={`form-field-role-${role.value}`}
+                            className={`cursor-pointer rounded-xl border-2 p-4 text-left transition-all duration-300 sm:p-6 ${
                               selectedRole === role.value
                                 ? 'border-blue-500 bg-blue-500/10 shadow-[0_0_30px_rgba(59,130,246,0.4)]'
                                 : formErrors.role
@@ -1056,6 +1049,21 @@ export default function Home() {
                                   : 'border-white/10 bg-black/30 hover:border-blue-500/50 hover:bg-blue-500/5'
                             }`}
                           >
+                            <input
+                              type="radio"
+                              id={`form-field-role-${role.value}`}
+                              name="role"
+                              value={role.value}
+                              checked={selectedRole === role.value}
+                              onChange={(e) => {
+                                setSelectedRole(e.target.value)
+                                setFormData({ ...formData, role: e.target.value })
+                                if (formErrors.role) {
+                                  setFormErrors({ ...formErrors, role: undefined })
+                                }
+                              }}
+                              className="sr-only"
+                            />
                             <div className="flex items-center justify-between">
                               <span
                                 className={`text-base font-semibold sm:text-lg ${
@@ -1076,7 +1084,7 @@ export default function Home() {
                                 )}
                               </div>
                             </div>
-                          </button>
+                          </label>
                         ))}
                       </div>
                       {formErrors.role && (
@@ -1102,6 +1110,7 @@ export default function Home() {
                         }}
                       >
                         <SelectTrigger
+                          id="form-field-salesVolume"
                           className={`h-12 border-white/10 bg-black/50 text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-14 ${
                             formErrors.salesVolume ? 'border-red-500/50' : ''
                           }`}
@@ -1139,6 +1148,7 @@ export default function Home() {
                         }}
                       >
                         <SelectTrigger
+                          id="form-field-marketingBudget"
                           className={`h-12 border-white/10 bg-black/50 text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-14 ${
                             formErrors.marketingBudget ? 'border-red-500/50' : ''
                           }`}
@@ -1161,6 +1171,7 @@ export default function Home() {
 
                     <div className="space-y-3 sm:space-y-4">
                       <Button
+                        id="form-field-submit"
                         type="submit"
                         size="lg"
                         disabled={isSubmitting}

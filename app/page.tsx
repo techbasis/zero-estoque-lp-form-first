@@ -43,6 +43,7 @@ const formSchema = z.object({
   name: z.string().min(3, 'Nome deve ter no mínimo 3 caracteres'),
   email: z.string().email('Email inválido'),
   phone: z.string().min(10, 'Telefone deve ter no mínimo 10 dígitos'),
+  instagram: z.string().optional(),
   company: z.string().min(2, 'Nome da empresa deve ter no mínimo 2 caracteres'),
   role: z.string().min(1, 'Selecione um cargo'),
   salesVolume: z.string().min(1, 'Selecione o volume de vendas'),
@@ -136,6 +137,7 @@ export default function Home() {
     name: '',
     email: '',
     phone: '',
+    instagram: '',
     company: '',
     role: '',
     salesVolume: '',
@@ -229,6 +231,7 @@ export default function Home() {
           name: '',
           email: '',
           phone: '',
+          instagram: '',
           company: '',
           role: '',
           salesVolume: '',
@@ -994,6 +997,26 @@ export default function Home() {
                           {formErrors.phone && (
                             <p className="text-xs text-red-400 sm:text-sm">{formErrors.phone}</p>
                           )}
+                        </div>
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="form-field-instagram"
+                            className="text-sm font-medium text-white sm:text-base"
+                          >
+                            Instagram
+                          </Label>
+                          <Input
+                            id="form-field-instagram"
+                            placeholder="@instagram_comercial"
+                            value={formData.instagram}
+                            onChange={(e) => {
+                              setFormData({ ...formData, instagram: e.target.value })
+                              if (formErrors.instagram) {
+                                setFormErrors({ ...formErrors, instagram: undefined })
+                              }
+                            }}
+                            className="h-11 border-white/10 bg-black/50 text-white transition-all placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-12"
+                          />
                         </div>
                         <div className="space-y-2">
                           <Label

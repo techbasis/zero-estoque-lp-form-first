@@ -36,7 +36,7 @@ async function sendToN8nWebhook(formData: FormData): Promise<ApiResponse> {
       },
       body: JSON.stringify(formData),
     })
-
+    console.log('response', response)
     if (!response.ok) {
       throw new Error(`Webhook retornou status ${response.status}`)
     }
@@ -93,7 +93,7 @@ export async function POST(request: Request) {
     return NextResponse.json(result, { status: 200 })
   } catch (error) {
     console.error('❌ Erro no processamento da requisição:', error)
-
+    console.log(error)
     return NextResponse.json(
       {
         success: false,

@@ -194,12 +194,18 @@ export default function Home() {
     setIsSubmitting(true)
 
     try {
+      // sanitize phone: remove any non-digit characters and trim
+      const sanitizedPhone = (formData.phone || '').replace(/\D/g, '').trim()
+
+      // build payload to send (use sanitized phone)
+      const payload = { ...formData, phone: sanitizedPhone }
+
       const response = await fetch('/api/rdstation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       })
 
       const result = await response.json()
@@ -208,17 +214,19 @@ export default function Home() {
         // Track successful form submission
         gtag.trackFormSubmit('Lead Form - Landing Page')
 
-        // Push to dataLayer for GTM
+        // Push to dataLayer for GTM (use sanitized phone)
         if (typeof window !== 'undefined' && window.dataLayer) {
           window.dataLayer.push({
             event: 'form_submission',
             form_name: 'Lead Form',
             form_type: 'contact',
-            user_email: formData.email,
-            user_company: formData.company,
-            user_role: formData.role,
-            sales_volume: formData.salesVolume,
-            marketing_budget: formData.marketingBudget,
+            user_email: payload.email,
+            user_phone: payload.phone,
+            user_company: payload.company,
+            user_role: payload.role,
+            sales_volume: payload.salesVolume,
+            marketing_budget: payload.marketingBudget,
+            instagram: payload.instagram,
           })
         }
 

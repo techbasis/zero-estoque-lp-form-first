@@ -35,19 +35,32 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import type React from 'react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { z } from 'zod'
 
 // Schema de validação com Zod
 const formSchema = z.object({
-  name: z.string().min(3, 'Nome deve ter no mínimo 3 caracteres'),
+  name: z
+    .string()
+    .min(3, 'Nome deve ter no mínimo 3 caracteres')
+    .regex(/^[a-zA-ZÀ-ÿ\s]+$/, 'Nome não pode conter caracteres especiais ou números'),
   email: z.string().email('Email inválido'),
   phone: z.string().min(10, 'Telefone deve ter no mínimo 10 dígitos'),
   instagram: z.string().optional(),
-  company: z.string().min(2, 'Nome da empresa deve ter no mínimo 2 caracteres'),
+  company: z
+    .string()
+    .min(2, 'Nome da empresa deve ter no mínimo 2 caracteres')
+    .regex(
+      /^[a-zA-ZÀ-ÿ0-9\s]+$/,
+      'Nome da empresa não pode conter caracteres especiais (apenas letras, números e espaços)'
+    ),
   role: z.string().min(1, 'Selecione um cargo'),
   salesVolume: z.string().min(1, 'Selecione o volume de vendas'),
   marketingBudget: z.string().min(1, 'Selecione o investimento em marketing'),
+  // UTM parameters (opcionais)
+  utm_campaign: z.string().optional(),
+  utm_content: z.string().optional(),
+  utm_term: z.string().optional(),
 })
 
 type FormData = z.infer<typeof formSchema>
@@ -142,6 +155,9 @@ export default function Home() {
     role: '',
     salesVolume: '',
     marketingBudget: '',
+    utm_campaign: '',
+    utm_content: '',
+    utm_term: '',
   })
 
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof FormData, string>>>({})
@@ -152,6 +168,26 @@ export default function Home() {
   const [submitMessage, setSubmitMessage] = useState('')
   const videoRef = useRef<HTMLVideoElement>(null)
   const formRef = useRef<HTMLDivElement>(null)
+
+  // Captura UTM parameters da URL quando o componente monta
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const searchParams = new URLSearchParams(window.location.search)
+      const utmCampaign = searchParams.get('utm_campaign') || ''
+      const utmContent = searchParams.get('utm_content') || ''
+      const utmTerm = searchParams.get('utm_term') || ''
+
+      // Atualiza o formData com os UTM params se existirem
+      if (utmCampaign || utmContent || utmTerm) {
+        setFormData((prev) => ({
+          ...prev,
+          utm_campaign: utmCampaign,
+          utm_content: utmContent,
+          utm_term: utmTerm,
+        }))
+      }
+    }
+  }, [])
 
   const handleUnmute = () => {
     if (videoRef.current) {
@@ -227,6 +263,9 @@ export default function Home() {
             sales_volume: payload.salesVolume,
             marketing_budget: payload.marketingBudget,
             instagram: payload.instagram,
+            utm_campaign: payload.utm_campaign,
+            utm_content: payload.utm_content,
+            utm_term: payload.utm_term,
           })
         }
 
@@ -234,7 +273,15 @@ export default function Home() {
         setSubmitMessage(
           'Formulário enviado com sucesso! Nossa equipe entrará em contato em breve.'
         )
-        // Reset form
+
+        // Preserve UTM params on reset
+        const preservedUtmParams = {
+          utm_campaign: formData.utm_campaign,
+          utm_content: formData.utm_content,
+          utm_term: formData.utm_term,
+        }
+
+        // Reset form but keep UTM params
         setFormData({
           name: '',
           email: '',
@@ -244,6 +291,7 @@ export default function Home() {
           role: '',
           salesVolume: '',
           marketingBudget: '',
+          ...preservedUtmParams,
         })
         setSelectedRole('')
         setFormErrors({})

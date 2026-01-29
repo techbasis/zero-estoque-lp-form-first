@@ -5,10 +5,14 @@ interface FormData {
   name: string
   email: string
   phone: string
+  instagram?: string
   company: string
-  cnpj: string
-  concessionaires: string
-  message?: string
+  role: string
+  salesVolume: string
+  marketingBudget: string
+  utm_campaign?: string
+  utm_content?: string
+  utm_term?: string
 }
 
 // Interface para a resposta da API
@@ -36,17 +40,25 @@ async function sendToN8nWebhook(formData: FormData): Promise<ApiResponse> {
       },
       body: JSON.stringify(formData),
     })
-    console.log('response', response)
+    
+    console.log('📤 Webhook n8n - Status:', response.status)
+    console.log('📤 Webhook n8n - URL:', webhookUrl)
+    
     if (!response.ok) {
-      throw new Error(`Webhook retornou status ${response.status}`)
+      const errorText = await response.text()
+      console.error('❌ Webhook retornou erro:', errorText)
+      throw new Error(`Webhook retornou status ${response.status}: ${errorText}`)
     }
+
+    const responseData = await response.json()
+    console.log('✅ Resposta do n8n:', responseData)
 
     return {
       success: true,
       message: 'Dados enviados com sucesso para o n8n',
     }
   } catch (error) {
-    console.error('Erro ao enviar para n8n webhook:', error)
+    console.error('❌ Erro ao enviar para n8n webhook:', error)
     throw error
   }
 }
@@ -73,13 +85,16 @@ export async function POST(request: Request) {
     // Parse do body da requisição
     const body: FormData = await request.json()
 
+    console.log('📥 Dados recebidos do formulário:', JSON.stringify(body, null, 2))
+
     // Validação básica dos campos obrigatórios
-    if (!body.name || !body.email || !body.phone || !body.company) {
+    if (!body.name || !body.email || !body.phone || !body.company || !body.role) {
+      console.error('❌ Validação falhou - campos obrigatórios faltando')
       return NextResponse.json(
         {
           success: false,
           message: 'Campos obrigatórios não preenchidos',
-          error: 'name, email, phone e company são obrigatórios',
+          error: 'name, email, phone, company e role são obrigatórios',
         } as ApiResponse,
         { status: 400 }
       )

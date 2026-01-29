@@ -40,10 +40,10 @@ async function sendToN8nWebhook(formData: FormData): Promise<ApiResponse> {
       },
       body: JSON.stringify(formData),
     })
-    
+
     console.log('📤 Webhook n8n - Status:', response.status)
     console.log('📤 Webhook n8n - URL:', webhookUrl)
-    
+
     if (!response.ok) {
       const errorText = await response.text()
       console.error('❌ Webhook retornou erro:', errorText)

@@ -36,6 +36,7 @@ import {
 import Image from 'next/image'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
+import { toast } from 'react-toastify'
 import { z } from 'zod'
 
 // Schema de validação com Zod
@@ -88,21 +89,21 @@ const staggerContainer = {
 const services = [
   {
     icon: Users,
-    title: 'Anúncios que tiram curioso do caminho',
+    title: 'Anúncios que atraem comprador (não curioso)',
     description:
-      'Criamos anúncios falando do carro, da condição e da oportunidade de verdade do jeito que o comprador pensa. O resultado: o curioso passa reto e quem chama sua loja já vem com intenção real de negócio.',
+      'Criativos focados em estoque e oferta. Você recebe leads com intenção real de compra.',
   },
   {
     icon: TrendingUp,
-    title: 'Mídia comprada para vender os carros certos',
+    title: 'Tráfego focado em giro de estoque',
     description:
-      'Seu dinheiro de tráfego vai pros veículos que precisam sair, não pra "aparecer mais". Segmentamos por região, interesse e momento de compra, para encher a agenda do seu time com pessoas interessadas nos carros que estão parados no seu pátio.',
+      'Seu investimento vai para os carros que precisam sair. Segmentação por região e momento de compra.',
   },
   {
     icon: Award,
-    title: 'Time treinado para fechar, não só atender',
+    title: 'Atendimento com roteiro e follow-up pra fechar',
     description:
-      'Estruturamos roteiro, abordagem e follow-up para o seu vendedor saber exatamente o que falar em cada etapa. Assim, leads viram visitas, visitas viram propostas e propostas viram carros vendidos.',
+      'Processo simples pra transformar lead em visita, proposta e venda. Sem “atender por atender”.',
   },
 ]
 
@@ -166,8 +167,40 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [submitMessage, setSubmitMessage] = useState('')
+  const [isFormValid, setIsFormValid] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const formRef = useRef<HTMLDivElement>(null)
+
+  // Função para validar campo individual
+  const validateField = (fieldName: keyof FormData, value: string | undefined) => {
+    try {
+      const fieldSchema = formSchema.shape[fieldName]
+      fieldSchema.parse(value)
+      // Se passou, remove o erro desse campo
+      setFormErrors((prev) => {
+        const newErrors = { ...prev }
+        delete newErrors[fieldName]
+        return newErrors
+      })
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        setFormErrors((prev) => ({
+          ...prev,
+          [fieldName]: error.errors[0]?.message || 'Erro de validação',
+        }))
+      }
+    }
+  }
+
+  // Valida o formulário completo toda vez que formData muda
+  useEffect(() => {
+    try {
+      formSchema.parse(formData)
+      setIsFormValid(true)
+    } catch (error) {
+      setIsFormValid(false)
+    }
+  }, [formData])
 
   // Captura UTM parameters da URL quando o componente monta
   useEffect(() => {
@@ -222,7 +255,14 @@ export default function Home() {
         })
         setFormErrors(errors)
         setSubmitStatus('error')
-        setSubmitMessage('Por favor, preencha todos os campos obrigatórios corretamente.')
+        toast.error('Por favor, preencha todos os campos obrigatórios corretamente.', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        })
         return
       }
     }
@@ -270,8 +310,17 @@ export default function Home() {
         }
 
         setSubmitStatus('success')
-        setSubmitMessage(
-          'Formulário enviado com sucesso! Nossa equipe entrará em contato em breve.'
+
+        toast.success(
+          '✅ Formulário enviado com sucesso! Nossa equipe entrará em contato em breve.',
+          {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          }
         )
 
         // Preserve UTM params on reset
@@ -297,12 +346,26 @@ export default function Home() {
         setFormErrors({})
       } else {
         setSubmitStatus('error')
-        setSubmitMessage(result.message || 'Erro ao enviar formulário. Tente novamente.')
+        toast.error(`❌ ${result.message || 'Erro ao enviar formulário. Tente novamente.'}`, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        })
       }
     } catch (error) {
       console.error('[v0] Form submission error:', error)
       setSubmitStatus('error')
-      setSubmitMessage('Erro ao enviar formulário. Verifique sua conexão e tente novamente.')
+      toast.error('❌ Erro ao enviar formulário. Verifique sua conexão e tente novamente.', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -357,6 +420,10 @@ export default function Home() {
               fill
               className="object-cover"
               priority
+              quality={85}
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/50" />
           </div>
@@ -368,8 +435,8 @@ export default function Home() {
                   variants={fadeInUp}
                   className="mt-8 text-3xl font-bold tracking-tight text-balance text-white sm:text-4xl lg:text-6xl"
                 >
-                  Carro no pátio não paga boleto,
-                  <span className="text-blue-500"> VAMOS VENDER!</span>{' '}
+                  Carro parado custa caro.
+                  <span className="text-blue-500"> Vamos vender.</span>{' '}
                   <motion.span
                     className="inline-block"
                     animate={{
@@ -398,10 +465,26 @@ export default function Home() {
                   variants={fadeInUp}
                   className="mt-4 text-base leading-7 text-pretty text-gray-300 sm:mt-6 sm:text-lg sm:leading-8"
                 >
-                  Zere o estoque todo mês com uma metodologia criada só para lojas de veículos. Foco
-                  em giro rápido, lucro por carro e fila de compradores prontos para falar com o seu
-                  time.
+                  Aceleradora comercial automotiva: anúncios + tráfego + atendimento para tirar
+                  carro do pátio e aumentar o seu giro.
                 </motion.p>
+                <motion.div
+                  variants={fadeInUp}
+                  className="mt-4 grid gap-2 text-sm text-gray-200 sm:mt-5 sm:text-base"
+                >
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-500 sm:h-5 sm:w-5" />
+                    <span>Leads com intenção (anti-curiosos)</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-500 sm:h-5 sm:w-5" />
+                    <span>Campanhas focadas nos carros certos</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-500 sm:h-5 sm:w-5" />
+                    <span>Roteiro + follow-up para fechar</span>
+                  </div>
+                </motion.div>
                 <motion.div
                   variants={fadeInUp}
                   className="mt-6 flex flex-col items-stretch gap-3 sm:mt-10 sm:flex-row sm:items-center sm:gap-4"
@@ -412,10 +495,10 @@ export default function Home() {
                       size="lg"
                       className="bg-blue-600 py-3 text-sm text-white transition-all duration-300 hover:scale-105 hover:bg-blue-700 hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] sm:py-4 sm:text-base"
                     >
-                      QUERO VENDER MAIS CARROS TODO MÊS
+                      QUERO UM DIAGNÓSTICO
                     </Button>
                     <p className="text-center text-xs text-gray-400 sm:text-sm">
-                      Você fala direto com um especialista, sem robô e sem compromisso.
+                      Fale com um especialista. Sem robô e sem compromisso.
                     </p>
                   </div>
                 </motion.div>
@@ -436,18 +519,17 @@ export default function Home() {
                 variants={fadeInUp}
               >
                 <h2 className="text-2xl font-bold tracking-tight text-balance text-white sm:text-3xl lg:text-4xl">
-                  A <span className="text-blue-500">metodologia</span> que transforma estoque parado
-                  em carros vendidos todo mês.
+                  Estoque girando.
+                  <span className="text-blue-500"> Venda todo mês.</span>
                 </h2>
                 <p className="mt-4 text-base leading-7 text-pretty text-gray-300 sm:mt-6 sm:text-lg sm:leading-8">
-                  Não somos agência de marketing. Somos uma Aceleradora Comercial focada em VENDAS
-                  REAIS. Enquanto o mercado se perde em likes, branding, nossa metodologia Zera
-                  Estoque ataca o seu maior problema:{' '}
-                  <span className="font-bold text-blue-500 sm:text-xl">Carro parado no pátio.</span>
+                  Somos especialistas em lojas de veículos. O foco é simples:{' '}
+                  <span className="font-bold text-blue-500 sm:text-xl">carro vendido</span> — com
+                  funil completo e rotina comercial.
                 </p>
                 <div className="mt-6 space-y-3 sm:mt-8 sm:space-y-4">
                   <div className="flex items-start gap-2 sm:gap-3">
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-500 sm:h-6 sm:w-6" />
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-blue-500 sm:h-6 sm:w-6" />
                     <span className="text-sm text-white sm:text-base">
                       <span
                         className="font-bold"
@@ -455,12 +537,11 @@ export default function Home() {
                       >
                         Funil completo de vendas
                       </span>{' '}
-                      Do anúncio ao fechamento: conectamos criativos, tráfego e atendimento para o
-                      carro realmente sair do pátio.
+                      Do anúncio ao fechamento: campanha + atendimento + follow-up.
                     </span>
                   </div>
                   <div className="flex items-start gap-2 sm:gap-3">
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-500 sm:h-6 sm:w-6" />
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-blue-500 sm:h-6 sm:w-6" />
                     <span className="text-sm text-white sm:text-base">
                       <span
                         className="font-bold"
@@ -468,12 +549,12 @@ export default function Home() {
                       >
                         Especialistas em lojas de veículos
                       </span>{' '}
-                      Estratégias criadas só para o setor automotivo, entendendo estoque, margem e
-                      rotina de loja – não para "qualquer nicho".
+                      Estratégia feita pra estoque, margem e rotina de loja (não é “qualquer
+                      nicho”).
                     </span>
                   </div>
                   <div className="flex items-start gap-2 sm:gap-3">
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-500 sm:h-6 sm:w-6" />
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-blue-500 sm:h-6 sm:w-6" />
                     <span className="text-sm text-white sm:text-base">
                       <span
                         className="font-bold"
@@ -481,8 +562,7 @@ export default function Home() {
                       >
                         Metodologia Zera Estoque comprovada
                       </span>{' '}
-                      Pilares de Criativos Anti-Curiosos, Tráfego focado no estoque e treinamento de
-                      vendas, gerando leads prontos para comprar todos os meses.
+                      Criativos anti-curiosos + tráfego focado + processo de vendas.
                     </span>
                   </div>
                 </div>
@@ -492,7 +572,7 @@ export default function Home() {
                     size="lg"
                     className="w-full bg-blue-600 text-white transition-all duration-300 hover:scale-105 hover:bg-blue-700 hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] sm:w-auto"
                   >
-                    Saiba Mais
+                    Quero meu diagnóstico
                   </Button>
                 </motion.div>
               </motion.div>
@@ -801,7 +881,7 @@ export default function Home() {
                 Como fazemos seu estoque girar na prática
               </h2>
               <p className="mt-3 text-base text-gray-300 sm:mt-4 sm:text-lg">
-                Soluções completas para impulsionar suas vendas no mercado automotivo
+                Do anúncio ao fechamento: tudo pensado pra vender mais.
               </p>
             </motion.div>
             <motion.div
@@ -841,15 +921,14 @@ export default function Home() {
               className="mt-8 text-center sm:mt-12"
             >
               <p className="mb-6 text-lg font-medium text-gray-300 sm:text-xl">
-                Do anúncio ao contrato assinado, tudo é pensado para uma coisa: mais carros saindo
-                do pátio todos os meses.
+                Objetivo: mais carros saindo do pátio todo mês.
               </p>
               <Button
                 onClick={scrollToForm}
                 size="lg"
                 className="w-full bg-blue-600 text-white transition-all duration-300 hover:scale-105 hover:bg-blue-700 hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] sm:w-auto"
               >
-                Saiba Mais
+                Quero meu diagnóstico
               </Button>
             </motion.div>
           </div>
@@ -922,7 +1001,7 @@ export default function Home() {
                 size="lg"
                 className="w-full bg-blue-600 text-white transition-all duration-300 hover:scale-105 hover:bg-blue-700 hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] sm:w-auto"
               >
-                Saiba Mais
+                Quero meu diagnóstico
               </Button>
             </motion.div>
           </div>
@@ -945,30 +1024,15 @@ export default function Home() {
                 </span>
               </div>
               <h2 className="mb-3 text-3xl font-bold text-white sm:mb-4 sm:text-4xl">
-                Pronto para crescer?
+                Receba um plano para girar seu estoque
               </h2>
               <p className="mb-6 text-base text-gray-300 sm:mb-8 sm:text-lg">
-                Preencha o formulário e descubra como podemos ajudar você a vender mais
+                Preencha e fale com um especialista. Vamos te dizer o que ajustar para vender mais.
               </p>
             </div>
 
             {/* Formulário sempre visível */}
             <div className="mx-auto mt-8 max-w-2xl sm:mt-12">
-              {submitStatus === 'success' && (
-                <div className="mb-4 rounded-xl border-2 border-green-500/50 bg-green-500/10 p-4 shadow-[0_0_30px_rgba(34,197,94,0.3)] sm:mb-6 sm:p-6">
-                  <div className="flex items-center gap-2 text-green-400 sm:gap-3">
-                    <CheckCircle2 className="h-5 w-5 flex-shrink-0 sm:h-6 sm:w-6" />
-                    <p className="text-sm font-semibold sm:text-lg">{submitMessage}</p>
-                  </div>
-                </div>
-              )}
-
-              {submitStatus === 'error' && (
-                <div className="mb-4 rounded-xl border-2 border-red-500/50 bg-red-500/10 p-4 shadow-[0_0_30px_rgba(239,68,68,0.3)] sm:mb-6 sm:p-6">
-                  <p className="text-sm font-semibold text-red-400 sm:text-lg">{submitMessage}</p>
-                </div>
-              )}
-
               <Card className="border border-blue-500/20 bg-gradient-to-br from-blue-950/20 via-black/80 to-black/40 shadow-[0_0_50px_rgba(59,130,246,0.3)] backdrop-blur-xl">
                 <CardContent className="p-6 sm:p-8 md:p-12">
                   <form onSubmit={handleSubmit} className="space-y-8 text-left sm:space-y-10">
@@ -990,11 +1054,11 @@ export default function Home() {
                             placeholder="Digite seu nome completo"
                             value={formData.name}
                             onChange={(e) => {
-                              setFormData({ ...formData, name: e.target.value })
-                              if (formErrors.name) {
-                                setFormErrors({ ...formErrors, name: undefined })
-                              }
+                              const newValue = e.target.value
+                              setFormData({ ...formData, name: newValue })
+                              validateField('name', newValue)
                             }}
+                            onBlur={() => validateField('name', formData.name)}
                             className={`h-11 border-white/10 bg-black/50 text-white transition-all placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-12 ${
                               formErrors.name ? 'border-red-500/50' : ''
                             }`}
@@ -1016,11 +1080,11 @@ export default function Home() {
                             placeholder="seu@email.com"
                             value={formData.email}
                             onChange={(e) => {
-                              setFormData({ ...formData, email: e.target.value })
-                              if (formErrors.email) {
-                                setFormErrors({ ...formErrors, email: undefined })
-                              }
+                              const newValue = e.target.value
+                              setFormData({ ...formData, email: newValue })
+                              validateField('email', newValue)
                             }}
+                            onBlur={() => validateField('email', formData.email)}
                             className={`h-11 border-white/10 bg-black/50 text-white transition-all placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-12 ${
                               formErrors.email ? 'border-red-500/50' : ''
                             }`}
@@ -1041,11 +1105,11 @@ export default function Home() {
                             placeholder="(00) 00000-0000"
                             value={formData.phone}
                             onChange={(e) => {
-                              setFormData({ ...formData, phone: e.target.value })
-                              if (formErrors.phone) {
-                                setFormErrors({ ...formErrors, phone: undefined })
-                              }
+                              const newValue = e.target.value
+                              setFormData({ ...formData, phone: newValue })
+                              validateField('phone', newValue)
                             }}
+                            onBlur={() => validateField('phone', formData.phone)}
                             className={`h-11 border-white/10 bg-black/50 text-white transition-all placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-12 ${
                               formErrors.phone ? 'border-red-500/50' : ''
                             }`}
@@ -1086,11 +1150,11 @@ export default function Home() {
                             placeholder="Nome da sua empresa"
                             value={formData.company}
                             onChange={(e) => {
-                              setFormData({ ...formData, company: e.target.value })
-                              if (formErrors.company) {
-                                setFormErrors({ ...formErrors, company: undefined })
-                              }
+                              const newValue = e.target.value
+                              setFormData({ ...formData, company: newValue })
+                              validateField('company', newValue)
                             }}
+                            onBlur={() => validateField('company', formData.company)}
                             className={`h-11 border-white/10 bg-black/50 text-white transition-all placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-12 ${
                               formErrors.company ? 'border-red-500/50' : ''
                             }`}
@@ -1135,11 +1199,10 @@ export default function Home() {
                               value={role.value}
                               checked={selectedRole === role.value}
                               onChange={(e) => {
-                                setSelectedRole(e.target.value)
-                                setFormData({ ...formData, role: e.target.value })
-                                if (formErrors.role) {
-                                  setFormErrors({ ...formErrors, role: undefined })
-                                }
+                                const newValue = e.target.value
+                                setSelectedRole(newValue)
+                                setFormData({ ...formData, role: newValue })
+                                validateField('role', newValue)
                               }}
                               className="sr-only"
                             />
@@ -1183,9 +1246,7 @@ export default function Home() {
                         value={formData.salesVolume}
                         onValueChange={(value) => {
                           setFormData({ ...formData, salesVolume: value })
-                          if (formErrors.salesVolume) {
-                            setFormErrors({ ...formErrors, salesVolume: undefined })
-                          }
+                          validateField('salesVolume', value)
                         }}
                       >
                         <SelectTrigger
@@ -1221,9 +1282,7 @@ export default function Home() {
                         value={formData.marketingBudget}
                         onValueChange={(value) => {
                           setFormData({ ...formData, marketingBudget: value })
-                          if (formErrors.marketingBudget) {
-                            setFormErrors({ ...formErrors, marketingBudget: undefined })
-                          }
+                          validateField('marketingBudget', value)
                         }}
                       >
                         <SelectTrigger
@@ -1253,13 +1312,17 @@ export default function Home() {
                         id="form-field-submit"
                         type="submit"
                         size="lg"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !isFormValid}
                         className="w-full rounded-xl bg-blue-600 py-5 text-base font-semibold text-white shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all duration-300 hover:bg-blue-700 hover:shadow-[0_0_50px_rgba(59,130,246,0.7)] disabled:cursor-not-allowed disabled:opacity-50 sm:py-6 sm:text-lg"
                       >
-                        {isSubmitting ? 'Enviando...' : 'Enviar Formulário e Receber Proposta'}
+                        {isSubmitting
+                          ? 'Enviando...'
+                          : !isFormValid
+                            ? 'Preencha os campos obrigatórios'
+                            : 'Quero meu diagnóstico'}
                       </Button>
                       <p className="text-center text-xs text-gray-400 sm:text-sm">
-                        Ao enviar, você concorda em receber contato da nossa equipe
+                        Contato direto. Sem robô. Sem spam.
                       </p>
                     </div>
                   </form>
@@ -1283,7 +1346,7 @@ export default function Home() {
                 Nossa Equipe
               </h2>
               <p className="mt-3 text-base text-gray-300 sm:mt-4 sm:text-lg">
-                Conheça os profissionais dedicados que trabalham para transformar seu negócio
+                Time automotivo com foco em vendas e ROI
               </p>
             </motion.div>
             <motion.div
@@ -1303,19 +1366,19 @@ export default function Home() {
               className="text-center"
             >
               <h3 className="mb-6 text-xl font-bold text-white sm:mb-8 sm:text-2xl">
-                Foco total em resultados reais e mensuráveis
+                Foco total em resultado no estoque
               </h3>
               <div className="flex flex-col flex-wrap justify-center gap-4 text-sm text-gray-300 sm:flex-row sm:gap-6 sm:text-base lg:gap-8">
                 <div className="flex items-center justify-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-blue-500 sm:h-5 sm:w-5" />
+                  <CheckCircle2 className="h-5 w-5 shrink-0 text-blue-500 sm:h-5 sm:w-5" />
                   <span>Equipe especializada</span>
                 </div>
                 <div className="flex items-center justify-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-blue-500 sm:h-5 sm:w-5" />
+                  <CheckCircle2 className="h-5 w-5 shrink-0 text-blue-500 sm:h-5 sm:w-5" />
                   <span>Atendimento próximo</span>
                 </div>
                 <div className="flex items-center justify-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-blue-500 sm:h-5 sm:w-5" />
+                  <CheckCircle2 className="h-5 w-5 shrink-0 text-blue-500 sm:h-5 sm:w-5" />
                   <span>Mais de 23 empresas atendidas</span>
                 </div>
               </div>
@@ -1332,7 +1395,7 @@ export default function Home() {
                 size="lg"
                 className="w-full bg-blue-600 text-white transition-all duration-300 hover:scale-105 hover:bg-blue-700 hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] sm:w-auto"
               >
-                Saiba Mais
+                Quero meu diagnóstico
               </Button>
             </motion.div>
           </div>

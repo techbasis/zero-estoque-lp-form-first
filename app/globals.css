@@ -145,3 +145,32 @@
 .animate-scroll:hover {
   animation-play-state: paused;
 }
+
+/* Custom styles for react-toastify */
+.Toastify__toast {
+  @apply rounded-xl border border-white/10 bg-black/90 shadow-[0_0_30px_rgba(59,130,246,0.3)] backdrop-blur-xl;
+}
+
+.Toastify__toast--success {
+  @apply border-green-500/30 shadow-[0_0_30px_rgba(34,197,94,0.3)];
+}
+
+.Toastify__toast--error {
+  @apply border-red-500/30 shadow-[0_0_30px_rgba(239,68,68,0.3)];
+}
+
+.Toastify__toast-body {
+  @apply font-medium text-white;
+}
+
+.Toastify__progress-bar--success {
+  @apply bg-green-500;
+}
+
+.Toastify__progress-bar--error {
+  @apply bg-red-500;
+}
+
+.Toastify__close-button {
+  @apply text-white/70 hover:text-white;
+}

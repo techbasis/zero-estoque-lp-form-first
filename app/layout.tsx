@@ -9,6 +9,8 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import type React from 'react'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import './globals.css'
 
 const _geist = Geist({ subsets: ['latin'] })
@@ -109,6 +111,31 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="dark">
       <head>
+        {/* Preload Critical Images */}
+        <link
+          rel="preload"
+          as="image"
+          href="/images/super-banner.png"
+          imageSrcSet="/_next/image?url=%2Fimages%2Fsuper-banner.png&w=640&q=85 640w,
+                       /_next/image?url=%2Fimages%2Fsuper-banner.png&w=750&q=85 750w,
+                       /_next/image?url=%2Fimages%2Fsuper-banner.png&w=828&q=85 828w,
+                       /_next/image?url=%2Fimages%2Fsuper-banner.png&w=1080&q=85 1080w,
+                       /_next/image?url=%2Fimages%2Fsuper-banner.png&w=1200&q=85 1200w,
+                       /_next/image?url=%2Fimages%2Fsuper-banner.png&w=1920&q=85 1920w,
+                       /_next/image?url=%2Fimages%2Fsuper-banner.png&w=2048&q=85 2048w,
+                       /_next/image?url=%2Fimages%2Fsuper-banner.png&w=3840&q=85 3840w"
+          imageSizes="100vw"
+        />
+        <link rel="preload" as="image" href="/logo.png" />
+
+        {/* DNS Prefetch for external resources */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+
+        {/* Preconnect to external domains */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
+
         {/* Google Tag Manager */}
         {gtmId && (
           <script
@@ -161,6 +188,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           </noscript>
         )}
         {/* End Google Tag Manager (noscript) */}
+
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          className="!mt-16"
+        />
 
         {children}
         <Analytics />

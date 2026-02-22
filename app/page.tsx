@@ -67,13 +67,13 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 60 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.2 } },
 }
 
 const fadeIn = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.8 } },
+  visible: { opacity: 1, transition: { duration: 0.3 } },
 }
 
 const staggerContainer = {
@@ -81,7 +81,7 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
+      staggerChildren: 0.1,
     },
   },
 }
@@ -422,8 +422,6 @@ export default function Home() {
               priority
               quality={85}
               sizes="100vw"
-              placeholder="blur"
-              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
             />
             <div className="absolute inset-0 bg-linear-to-r from-black/85 via-black/75 to-black/60" />
           </div>
@@ -515,9 +513,9 @@ export default function Home() {
               {/* Formulário — direita */}
               <motion.div
                 ref={formRef}
-                initial={{ opacity: 0, x: 40 }}
+                initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7, delay: 0.2 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
               >
                 <Card className="border border-blue-500/25 bg-black/80 shadow-[0_0_60px_rgba(59,130,246,0.25)] backdrop-blur-xl">
                   <CardContent className="p-6 sm:p-8">

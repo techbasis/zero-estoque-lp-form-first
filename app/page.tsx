@@ -403,7 +403,7 @@ export default function Home() {
                 onClick={scrollToForm}
                 className="h-8 bg-blue-600 px-3 py-2 text-xs text-white transition-all duration-300 hover:bg-blue-700 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] sm:h-10 sm:px-6 sm:text-base"
               >
-                Preencher Formulário
+                Diagnóstico Gratuito
               </Button>
             </div>
           </div>
@@ -411,8 +411,8 @@ export default function Home() {
 
         <LeadFilterBanner />
 
-        {/* Hero Section */}
-        <section className="relative overflow-hidden py-16 pt-24 sm:py-20 sm:pt-32 lg:py-32 lg:pt-40">
+        {/* Hero + Form Section */}
+        <section className="relative overflow-hidden pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-32">
           <div className="absolute inset-0 z-0">
             <Image
               src="/images/super-banner.png"
@@ -425,83 +425,357 @@ export default function Home() {
               placeholder="blur"
               blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/50" />
+            <div className="absolute inset-0 bg-linear-to-r from-black/85 via-black/75 to-black/60" />
           </div>
 
           <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16">
-              <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
+            <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+              {/* Copy — esquerda */}
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={staggerContainer}
+                className="flex flex-col justify-center"
+              >
+                <motion.div variants={fadeInUp} className="mb-4">
+                  <span className="inline-block rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-xs font-semibold tracking-widest text-blue-400 uppercase sm:text-sm">
+                    Aceleradora Comercial Automotiva
+                  </span>
+                </motion.div>
+
                 <motion.h1
                   variants={fadeInUp}
-                  className="mt-8 text-3xl font-bold tracking-tight text-balance text-white sm:text-4xl lg:text-6xl"
+                  className="text-3xl leading-tight font-bold tracking-tight text-white sm:text-4xl lg:text-5xl xl:text-6xl"
                 >
-                  Carro parado custa caro.
-                  <span className="text-blue-500"> Vamos vender.</span>{' '}
+                  Carro parado
+                  <br />
+                  <span className="text-blue-500">custa caro.</span>
+                  <br />
+                  Vamos vender.{' '}
                   <motion.span
                     className="inline-block"
-                    animate={{
-                      y: [0, -10, 0],
-                      rotate: [0, 5, 0, -5, 0],
-                    }}
+                    animate={{ y: [0, -10, 0], rotate: [0, 5, 0, -5, 0] }}
                     transition={{
                       duration: 3,
                       repeat: Number.POSITIVE_INFINITY,
                       ease: 'easeInOut',
                     }}
-                    whileHover={{
-                      y: [0, -15, 0, -10, 0],
-                      rotate: [0, 10, -10, 8, -8, 0],
-                      transition: {
-                        duration: 0.6,
-                        repeat: Number.POSITIVE_INFINITY,
-                        ease: 'easeInOut',
-                      },
-                    }}
                   >
-                    <Rocket className="inline-block h-8 w-8 text-blue-500 sm:h-12 sm:w-12" />
-                  </motion.span>{' '}
+                    <Rocket className="inline-block h-8 w-8 text-blue-500 sm:h-10 sm:w-10" />
+                  </motion.span>
                 </motion.h1>
+
                 <motion.p
                   variants={fadeInUp}
-                  className="mt-4 text-base leading-7 text-pretty text-gray-300 sm:mt-6 sm:text-lg sm:leading-8"
+                  className="mt-4 text-base leading-7 text-gray-300 sm:mt-5 sm:text-lg"
                 >
-                  Aceleradora comercial automotiva: anúncios + tráfego + atendimento para tirar
-                  carro do pátio e aumentar o seu giro.
+                  Anúncios + tráfego + atendimento para tirar carro do pátio e aumentar o seu giro
+                  todo mês.
                 </motion.p>
-                <motion.div
-                  variants={fadeInUp}
-                  className="mt-4 grid gap-2 text-sm text-gray-200 sm:mt-5 sm:text-base"
-                >
-                  <div className="flex items-start gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-500 sm:h-5 sm:w-5" />
-                    <span>Leads com intenção (anti-curiosos)</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-500 sm:h-5 sm:w-5" />
-                    <span>Campanhas focadas nos carros certos</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-500 sm:h-5 sm:w-5" />
-                    <span>Roteiro + follow-up para fechar</span>
-                  </div>
+
+                <motion.div variants={fadeInUp} className="mt-5 space-y-2.5">
+                  {[
+                    'Leads com intenção real de compra (anti-curiosos)',
+                    'Campanhas focadas nos carros que precisam sair',
+                    'Roteiro + follow-up para fechar mais vendas',
+                  ].map((item) => (
+                    <div key={item} className="flex items-start gap-2.5">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-500 sm:h-5 sm:w-5" />
+                      <span className="text-sm text-gray-200 sm:text-base">{item}</span>
+                    </div>
+                  ))}
                 </motion.div>
-                <motion.div
-                  variants={fadeInUp}
-                  className="mt-6 flex flex-col items-stretch gap-3 sm:mt-10 sm:flex-row sm:items-center sm:gap-4"
-                >
-                  <div className="flex flex-col gap-2">
-                    <Button
-                      onClick={scrollToForm}
-                      size="lg"
-                      className="bg-blue-600 py-3 text-sm text-white transition-all duration-300 hover:scale-105 hover:bg-blue-700 hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] sm:py-4 sm:text-base"
+
+                {/* Social proof — depoimentos rápidos */}
+                <motion.div variants={fadeInUp} className="mt-8 space-y-3">
+                  {[
+                    { result: '+50% de vendas', store: 'TWI MOTORS — 52 dias' },
+                    { result: '3 carros em 5 dias', store: 'AION VEÍCULOS' },
+                    { result: '+41% giro', store: 'FELICAR VEÍCULOS — 90 dias' },
+                  ].map((t) => (
+                    <div
+                      key={t.store}
+                      className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/40 px-4 py-2.5 backdrop-blur-sm"
                     >
-                      QUERO UM DIAGNÓSTICO
-                    </Button>
-                    <p className="text-center text-xs text-gray-400 sm:text-sm">
-                      Fale com um especialista. Sem robô e sem compromisso.
-                    </p>
-                  </div>
+                      <span className="text-sm font-bold text-blue-400 sm:text-base">
+                        {t.result}
+                      </span>
+                      <span className="text-xs text-gray-400 sm:text-sm">— {t.store}</span>
+                    </div>
+                  ))}
                 </motion.div>
+
+                {/* Logos parceiros */}
+                <motion.div variants={fadeInUp} className="mt-8 flex items-center gap-3">
+                  <span className="text-xs text-gray-500">Confiam na BASIS:</span>
+                  <span className="text-xs font-medium text-gray-400">23+ lojas atendidas</span>
+                </motion.div>
+              </motion.div>
+
+              {/* Formulário — direita */}
+              <motion.div
+                ref={formRef}
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7, delay: 0.2 }}
+              >
+                <Card className="border border-blue-500/25 bg-black/80 shadow-[0_0_60px_rgba(59,130,246,0.25)] backdrop-blur-xl">
+                  <CardContent className="p-6 sm:p-8">
+                    <div className="mb-5 text-center">
+                      <span className="mb-2 inline-block rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-400">
+                        Diagnóstico Gratuito
+                      </span>
+                      <h2 className="text-xl font-bold text-white sm:text-2xl">
+                        Receba um plano para girar seu estoque
+                      </h2>
+                      <p className="mt-1.5 text-sm text-gray-400">
+                        Preencha e fale com um especialista. Sem robô.
+                      </p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-5 text-left">
+                      {/* Nome + Email */}
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div className="space-y-1.5">
+                          <Label
+                            htmlFor="hero-name"
+                            className="text-xs font-medium text-white sm:text-sm"
+                          >
+                            Nome Completo *
+                          </Label>
+                          <Input
+                            id="hero-name"
+                            placeholder="Seu nome"
+                            value={formData.name}
+                            onChange={(e) => {
+                              setFormData({ ...formData, name: e.target.value })
+                              validateField('name', e.target.value)
+                            }}
+                            onBlur={() => validateField('name', formData.name)}
+                            className={`h-10 border-white/10 bg-black/60 text-sm text-white placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-11 ${formErrors.name ? 'border-red-500/50' : ''}`}
+                          />
+                          {formErrors.name && (
+                            <p className="text-xs text-red-400">{formErrors.name}</p>
+                          )}
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label
+                            htmlFor="hero-email"
+                            className="text-xs font-medium text-white sm:text-sm"
+                          >
+                            Email *
+                          </Label>
+                          <Input
+                            id="hero-email"
+                            type="email"
+                            placeholder="seu@email.com"
+                            value={formData.email}
+                            onChange={(e) => {
+                              setFormData({ ...formData, email: e.target.value })
+                              validateField('email', e.target.value)
+                            }}
+                            onBlur={() => validateField('email', formData.email)}
+                            className={`h-10 border-white/10 bg-black/60 text-sm text-white placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-11 ${formErrors.email ? 'border-red-500/50' : ''}`}
+                          />
+                          {formErrors.email && (
+                            <p className="text-xs text-red-400">{formErrors.email}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Telefone + Instagram */}
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div className="space-y-1.5">
+                          <Label
+                            htmlFor="hero-phone"
+                            className="text-xs font-medium text-white sm:text-sm"
+                          >
+                            WhatsApp *
+                          </Label>
+                          <Input
+                            id="hero-phone"
+                            placeholder="(00) 00000-0000"
+                            value={formData.phone}
+                            onChange={(e) => {
+                              setFormData({ ...formData, phone: e.target.value })
+                              validateField('phone', e.target.value)
+                            }}
+                            onBlur={() => validateField('phone', formData.phone)}
+                            className={`h-10 border-white/10 bg-black/60 text-sm text-white placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-11 ${formErrors.phone ? 'border-red-500/50' : ''}`}
+                          />
+                          {formErrors.phone && (
+                            <p className="text-xs text-red-400">{formErrors.phone}</p>
+                          )}
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label
+                            htmlFor="hero-company"
+                            className="text-xs font-medium text-white sm:text-sm"
+                          >
+                            Empresa *
+                          </Label>
+                          <Input
+                            id="hero-company"
+                            placeholder="Nome da loja"
+                            value={formData.company}
+                            onChange={(e) => {
+                              setFormData({ ...formData, company: e.target.value })
+                              validateField('company', e.target.value)
+                            }}
+                            onBlur={() => validateField('company', formData.company)}
+                            className={`h-10 border-white/10 bg-black/60 text-sm text-white placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-11 ${formErrors.company ? 'border-red-500/50' : ''}`}
+                          />
+                          {formErrors.company && (
+                            <p className="text-xs text-red-400">{formErrors.company}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Cargo */}
+                      <div className="space-y-2">
+                        <Label className="text-xs font-medium text-white sm:text-sm">
+                          Seu Cargo *
+                        </Label>
+                        <div className="grid grid-cols-2 gap-2">
+                          {[
+                            { value: 'owner', label: 'Dono / Sócio' },
+                            { value: 'manager', label: 'Gerente' },
+                            { value: 'employee', label: 'Vendedor CLT' },
+                            { value: 'autonomous', label: 'Autônomo' },
+                          ].map((role) => (
+                            <label
+                              key={role.value}
+                              htmlFor={`hero-role-${role.value}`}
+                              className={`cursor-pointer rounded-lg border px-3 py-2.5 text-center text-xs font-medium transition-all sm:text-sm ${
+                                selectedRole === role.value
+                                  ? 'border-blue-500 bg-blue-500/15 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.3)]'
+                                  : 'border-white/10 text-gray-400 hover:border-blue-500/40 hover:text-white'
+                              }`}
+                            >
+                              <input
+                                type="radio"
+                                id={`hero-role-${role.value}`}
+                                name="hero-role"
+                                value={role.value}
+                                checked={selectedRole === role.value}
+                                onChange={(e) => {
+                                  setSelectedRole(e.target.value)
+                                  setFormData({ ...formData, role: e.target.value })
+                                  validateField('role', e.target.value)
+                                }}
+                                className="sr-only"
+                              />
+                              {role.label}
+                            </label>
+                          ))}
+                        </div>
+                        {formErrors.role && (
+                          <p className="text-xs text-red-400">{formErrors.role}</p>
+                        )}
+                      </div>
+
+                      {/* Volume de Vendas + Budget */}
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div className="space-y-1.5">
+                          <Label
+                            htmlFor="hero-sales"
+                            className="text-xs font-medium text-white sm:text-sm"
+                          >
+                            Carros/mês *
+                          </Label>
+                          <Select
+                            value={formData.salesVolume}
+                            onValueChange={(value) => {
+                              setFormData({ ...formData, salesVolume: value })
+                              validateField('salesVolume', value)
+                            }}
+                          >
+                            <SelectTrigger
+                              id="hero-sales"
+                              className={`h-10 border-white/10 bg-black/60 text-sm text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-11 ${formErrors.salesVolume ? 'border-red-500/50' : ''}`}
+                            >
+                              <SelectValue placeholder="Selecione" />
+                            </SelectTrigger>
+                            <SelectContent className="border-blue-500/20 bg-black backdrop-blur-xl">
+                              <SelectItem value="1-5">1 a 5 carros</SelectItem>
+                              <SelectItem value="6-10">6 a 10 carros</SelectItem>
+                              <SelectItem value="11-30">11 a 30 carros</SelectItem>
+                              <SelectItem value="31-50">31 a 50 carros</SelectItem>
+                              <SelectItem value="50+">50+ carros</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          {formErrors.salesVolume && (
+                            <p className="text-xs text-red-400">{formErrors.salesVolume}</p>
+                          )}
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label
+                            htmlFor="hero-budget"
+                            className="text-xs font-medium text-white sm:text-sm"
+                          >
+                            Invest. Marketing *
+                          </Label>
+                          <Select
+                            value={formData.marketingBudget}
+                            onValueChange={(value) => {
+                              setFormData({ ...formData, marketingBudget: value })
+                              validateField('marketingBudget', value)
+                            }}
+                          >
+                            <SelectTrigger
+                              id="hero-budget"
+                              className={`h-10 border-white/10 bg-black/60 text-sm text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-11 ${formErrors.marketingBudget ? 'border-red-500/50' : ''}`}
+                            >
+                              <SelectValue placeholder="Selecione" />
+                            </SelectTrigger>
+                            <SelectContent className="border-blue-500/20 bg-black backdrop-blur-xl">
+                              <SelectItem value="500-1000">R$ 500 – R$ 1.000</SelectItem>
+                              <SelectItem value="1001-3000">R$ 1.001 – R$ 3.000</SelectItem>
+                              <SelectItem value="3001-10000">R$ 3.001 – R$ 10.000</SelectItem>
+                              <SelectItem value="10000+">R$ 10.000+</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          {formErrors.marketingBudget && (
+                            <p className="text-xs text-red-400">{formErrors.marketingBudget}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Instagram (opcional) */}
+                      <div className="space-y-1.5">
+                        <Label
+                          htmlFor="hero-instagram"
+                          className="text-xs font-medium text-white sm:text-sm"
+                        >
+                          Instagram da loja <span className="text-gray-500">(opcional)</span>
+                        </Label>
+                        <Input
+                          id="hero-instagram"
+                          placeholder="@instagram_comercial"
+                          value={formData.instagram}
+                          onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
+                          className="h-10 border-white/10 bg-black/60 text-sm text-white placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-11"
+                        />
+                      </div>
+
+                      <Button
+                        type="submit"
+                        size="lg"
+                        disabled={isSubmitting || !isFormValid}
+                        className="w-full rounded-xl bg-blue-600 py-5 text-sm font-bold text-white shadow-[0_0_30px_rgba(59,130,246,0.4)] transition-all duration-300 hover:bg-blue-700 hover:shadow-[0_0_50px_rgba(59,130,246,0.7)] disabled:cursor-not-allowed disabled:opacity-50 sm:text-base"
+                      >
+                        {isSubmitting
+                          ? 'Enviando...'
+                          : !isFormValid
+                            ? 'Preencha os campos obrigatórios'
+                            : '🚀 QUERO MEU DIAGNÓSTICO GRATUITO'}
+                      </Button>
+                      <p className="text-center text-xs text-gray-500">
+                        Contato direto com especialista. Sem robô. Sem spam.
+                      </p>
+                    </form>
+                  </CardContent>
+                </Card>
               </motion.div>
             </div>
           </div>
@@ -1006,331 +1280,6 @@ export default function Home() {
             </motion.div>
           </div>
         </section>
-
-        {/* Form Section */}
-        <motion.section
-          ref={formRef}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          variants={fadeInUp}
-          className="py-16 sm:py-24 lg:py-32"
-        >
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl text-center">
-              <div className="mb-4 inline-block sm:mb-6">
-                <span className="rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1.5 text-xs font-medium text-blue-400 sm:px-4 sm:py-2 sm:text-sm">
-                  Comece Agora
-                </span>
-              </div>
-              <h2 className="mb-3 text-3xl font-bold text-white sm:mb-4 sm:text-4xl">
-                Receba um plano para girar seu estoque
-              </h2>
-              <p className="mb-6 text-base text-gray-300 sm:mb-8 sm:text-lg">
-                Preencha e fale com um especialista. Vamos te dizer o que ajustar para vender mais.
-              </p>
-            </div>
-
-            {/* Formulário sempre visível */}
-            <div className="mx-auto mt-8 max-w-2xl sm:mt-12">
-              <Card className="border border-blue-500/20 bg-gradient-to-br from-blue-950/20 via-black/80 to-black/40 shadow-[0_0_50px_rgba(59,130,246,0.3)] backdrop-blur-xl">
-                <CardContent className="p-6 sm:p-8 md:p-12">
-                  <form onSubmit={handleSubmit} className="space-y-8 text-left sm:space-y-10">
-                    {/* Informações Básicas */}
-                    <div className="space-y-4 sm:space-y-6">
-                      <h3 className="text-xl font-bold text-white sm:text-2xl">
-                        Informações Básicas
-                      </h3>
-                      <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2">
-                        <div className="space-y-2">
-                          <Label
-                            htmlFor="form-field-name"
-                            className="text-sm font-medium text-white sm:text-base"
-                          >
-                            Nome Completo *
-                          </Label>
-                          <Input
-                            id="form-field-name"
-                            placeholder="Digite seu nome completo"
-                            value={formData.name}
-                            onChange={(e) => {
-                              const newValue = e.target.value
-                              setFormData({ ...formData, name: newValue })
-                              validateField('name', newValue)
-                            }}
-                            onBlur={() => validateField('name', formData.name)}
-                            className={`h-11 border-white/10 bg-black/50 text-white transition-all placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-12 ${
-                              formErrors.name ? 'border-red-500/50' : ''
-                            }`}
-                          />
-                          {formErrors.name && (
-                            <p className="text-xs text-red-400 sm:text-sm">{formErrors.name}</p>
-                          )}
-                        </div>
-                        <div className="space-y-2">
-                          <Label
-                            htmlFor="form-field-email"
-                            className="text-sm font-medium text-white sm:text-base"
-                          >
-                            Email Profissional *
-                          </Label>
-                          <Input
-                            id="form-field-email"
-                            type="email"
-                            placeholder="seu@email.com"
-                            value={formData.email}
-                            onChange={(e) => {
-                              const newValue = e.target.value
-                              setFormData({ ...formData, email: newValue })
-                              validateField('email', newValue)
-                            }}
-                            onBlur={() => validateField('email', formData.email)}
-                            className={`h-11 border-white/10 bg-black/50 text-white transition-all placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-12 ${
-                              formErrors.email ? 'border-red-500/50' : ''
-                            }`}
-                          />
-                          {formErrors.email && (
-                            <p className="text-xs text-red-400 sm:text-sm">{formErrors.email}</p>
-                          )}
-                        </div>
-                        <div className="space-y-2">
-                          <Label
-                            htmlFor="form-field-phone"
-                            className="text-sm font-medium text-white sm:text-base"
-                          >
-                            Telefone / WhatsApp *
-                          </Label>
-                          <Input
-                            id="form-field-phone"
-                            placeholder="(00) 00000-0000"
-                            value={formData.phone}
-                            onChange={(e) => {
-                              const newValue = e.target.value
-                              setFormData({ ...formData, phone: newValue })
-                              validateField('phone', newValue)
-                            }}
-                            onBlur={() => validateField('phone', formData.phone)}
-                            className={`h-11 border-white/10 bg-black/50 text-white transition-all placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-12 ${
-                              formErrors.phone ? 'border-red-500/50' : ''
-                            }`}
-                          />
-                          {formErrors.phone && (
-                            <p className="text-xs text-red-400 sm:text-sm">{formErrors.phone}</p>
-                          )}
-                        </div>
-                        <div className="space-y-2">
-                          <Label
-                            htmlFor="form-field-instagram"
-                            className="text-sm font-medium text-white sm:text-base"
-                          >
-                            Instagram
-                          </Label>
-                          <Input
-                            id="form-field-instagram"
-                            placeholder="@instagram_comercial"
-                            value={formData.instagram}
-                            onChange={(e) => {
-                              setFormData({ ...formData, instagram: e.target.value })
-                              if (formErrors.instagram) {
-                                setFormErrors({ ...formErrors, instagram: undefined })
-                              }
-                            }}
-                            className="h-11 border-white/10 bg-black/50 text-white transition-all placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-12"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label
-                            htmlFor="form-field-company"
-                            className="text-sm font-medium text-white sm:text-base"
-                          >
-                            Nome da Empresa *
-                          </Label>
-                          <Input
-                            id="form-field-company"
-                            placeholder="Nome da sua empresa"
-                            value={formData.company}
-                            onChange={(e) => {
-                              const newValue = e.target.value
-                              setFormData({ ...formData, company: newValue })
-                              validateField('company', newValue)
-                            }}
-                            onBlur={() => validateField('company', formData.company)}
-                            className={`h-11 border-white/10 bg-black/50 text-white transition-all placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-12 ${
-                              formErrors.company ? 'border-red-500/50' : ''
-                            }`}
-                          />
-                          {formErrors.company && (
-                            <p className="text-xs text-red-400 sm:text-sm">{formErrors.company}</p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Qual seu Cargo */}
-                    <div className="space-y-3 sm:space-y-4">
-                      <h3 className="text-xl font-bold text-white sm:text-2xl">
-                        Qual seu Cargo? *
-                      </h3>
-                      <p className="text-sm text-gray-400 sm:text-base">
-                        Selecione a opção que melhor descreve sua posição
-                      </p>
-                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
-                        {[
-                          { value: 'owner', label: 'Dono / Sócio' },
-                          { value: 'manager', label: 'Gerente' },
-                          { value: 'employee', label: 'Vendedor contratado' },
-                          { value: 'autonomous', label: 'Vendedor Autônomo' },
-                        ].map((role) => (
-                          <label
-                            key={role.value}
-                            htmlFor={`form-field-role-${role.value}`}
-                            className={`cursor-pointer rounded-xl border-2 p-4 text-left transition-all duration-300 sm:p-6 ${
-                              selectedRole === role.value
-                                ? 'border-blue-500 bg-blue-500/10 shadow-[0_0_30px_rgba(59,130,246,0.4)]'
-                                : formErrors.role
-                                  ? 'border-red-500/50 bg-black/30 hover:border-red-500/70'
-                                  : 'border-white/10 bg-black/30 hover:border-blue-500/50 hover:bg-blue-500/5'
-                            }`}
-                          >
-                            <input
-                              type="radio"
-                              id={`form-field-role-${role.value}`}
-                              name="role"
-                              value={role.value}
-                              checked={selectedRole === role.value}
-                              onChange={(e) => {
-                                const newValue = e.target.value
-                                setSelectedRole(newValue)
-                                setFormData({ ...formData, role: newValue })
-                                validateField('role', newValue)
-                              }}
-                              className="sr-only"
-                            />
-                            <div className="flex items-center justify-between">
-                              <span
-                                className={`text-base font-semibold sm:text-lg ${
-                                  selectedRole === role.value ? 'text-blue-400' : 'text-white'
-                                }`}
-                              >
-                                {role.label}
-                              </span>
-                              <div
-                                className={`flex h-5 w-5 items-center justify-center rounded-full border-2 sm:h-6 sm:w-6 ${
-                                  selectedRole === role.value
-                                    ? 'border-blue-500 bg-blue-500'
-                                    : 'border-white/30'
-                                }`}
-                              >
-                                {selectedRole === role.value && (
-                                  <div className="h-2 w-2 rounded-full bg-white" />
-                                )}
-                              </div>
-                            </div>
-                          </label>
-                        ))}
-                      </div>
-                      {formErrors.role && (
-                        <p className="text-xs text-red-400 sm:text-sm">{formErrors.role}</p>
-                      )}
-                    </div>
-
-                    {/* Quantos carros você vende */}
-                    <div className="space-y-3 sm:space-y-4">
-                      <h3 className="text-xl font-bold text-white sm:text-2xl">
-                        Quantos carros você vende por mês? *
-                      </h3>
-                      <p className="text-sm text-gray-400 sm:text-base">
-                        Nos ajude a entender o volume de vendas atual
-                      </p>
-                      <Select
-                        value={formData.salesVolume}
-                        onValueChange={(value) => {
-                          setFormData({ ...formData, salesVolume: value })
-                          validateField('salesVolume', value)
-                        }}
-                      >
-                        <SelectTrigger
-                          id="form-field-salesVolume"
-                          className={`h-12 border-white/10 bg-black/50 text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-14 ${
-                            formErrors.salesVolume ? 'border-red-500/50' : ''
-                          }`}
-                        >
-                          <SelectValue placeholder="Selecione o volume" />
-                        </SelectTrigger>
-                        <SelectContent className="border-blue-500/20 bg-black backdrop-blur-xl">
-                          <SelectItem value="1-5">1 a 5 Carros</SelectItem>
-                          <SelectItem value="6-10">6 a 10 carros</SelectItem>
-                          <SelectItem value="11-30">11 a 30 Carros</SelectItem>
-                          <SelectItem value="31-50">31 a 50 Carros</SelectItem>
-                          <SelectItem value="50+">50+ Carros</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {formErrors.salesVolume && (
-                        <p className="text-xs text-red-400 sm:text-sm">{formErrors.salesVolume}</p>
-                      )}
-                    </div>
-
-                    {/* Investimento em marketing */}
-                    <div className="space-y-3 sm:space-y-4">
-                      <h3 className="text-xl font-bold text-white sm:text-2xl">
-                        Quanto você investe em marketing hoje? *
-                      </h3>
-                      <p className="text-sm text-gray-400 sm:text-base">
-                        Selecione a faixa de investimento mensal
-                      </p>
-                      <Select
-                        value={formData.marketingBudget}
-                        onValueChange={(value) => {
-                          setFormData({ ...formData, marketingBudget: value })
-                          validateField('marketingBudget', value)
-                        }}
-                      >
-                        <SelectTrigger
-                          id="form-field-marketingBudget"
-                          className={`h-12 border-white/10 bg-black/50 text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-14 ${
-                            formErrors.marketingBudget ? 'border-red-500/50' : ''
-                          }`}
-                        >
-                          <SelectValue placeholder="Selecione o investimento" />
-                        </SelectTrigger>
-                        <SelectContent className="border-blue-500/20 bg-black backdrop-blur-xl">
-                          <SelectItem value="500-1000">R$ 500 a R$ 1000</SelectItem>
-                          <SelectItem value="1001-3000">R$ 1001 a R$ 3.000</SelectItem>
-                          <SelectItem value="3001-10000">R$ 3001 a R$ 10.000</SelectItem>
-                          <SelectItem value="10000+">R$ 10.000+</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {formErrors.marketingBudget && (
-                        <p className="text-xs text-red-400 sm:text-sm">
-                          {formErrors.marketingBudget}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="space-y-3 sm:space-y-4">
-                      <Button
-                        id="form-field-submit"
-                        type="submit"
-                        size="lg"
-                        disabled={isSubmitting || !isFormValid}
-                        className="w-full rounded-xl bg-blue-600 py-5 text-base font-semibold text-white shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all duration-300 hover:bg-blue-700 hover:shadow-[0_0_50px_rgba(59,130,246,0.7)] disabled:cursor-not-allowed disabled:opacity-50 sm:py-6 sm:text-lg"
-                      >
-                        {isSubmitting
-                          ? 'Enviando...'
-                          : !isFormValid
-                            ? 'Preencha os campos obrigatórios'
-                            : 'Quero meu diagnóstico'}
-                      </Button>
-                      <p className="text-center text-xs text-gray-400 sm:text-sm">
-                        Contato direto. Sem robô. Sem spam.
-                      </p>
-                    </div>
-                  </form>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </motion.section>
 
         {/* Team Section */}
         <section className="py-16 sm:py-24 lg:py-32">

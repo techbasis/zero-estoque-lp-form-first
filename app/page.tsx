@@ -629,50 +629,41 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* Cargo */}
+                      {/* Cargo (agora Select) */}
                       <div className="space-y-2">
-                        <Label className="text-xs font-medium text-white sm:text-sm">
+                        <Label
+                          htmlFor="hero-role-select"
+                          className="text-xs font-medium text-white sm:text-sm"
+                        >
                           Seu Cargo *
                         </Label>
-                        <div className="grid grid-cols-2 gap-2">
-                          {[
-                            { value: 'owner', label: 'Dono / Sócio' },
-                            { value: 'manager', label: 'Gerente' },
-                            { value: 'employee', label: 'Vendedor CLT' },
-                            { value: 'autonomous', label: 'Autônomo' },
-                          ].map((role) => (
-                            <label
-                              key={role.value}
-                              htmlFor={`hero-role-${role.value}`}
-                              className={`cursor-pointer rounded-lg border px-3 py-2.5 text-center text-xs font-medium transition-all sm:text-sm ${
-                                selectedRole === role.value
-                                  ? 'border-blue-500 bg-blue-500/15 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.3)]'
-                                  : 'border-white/10 text-gray-400 hover:border-blue-500/40 hover:text-white'
-                              }`}
-                            >
-                              <input
-                                type="radio"
-                                id={`hero-role-${role.value}`}
-                                name="hero-role"
-                                value={role.value}
-                                checked={selectedRole === role.value}
-                                onChange={(e) => {
-                                  setSelectedRole(e.target.value)
-                                  setFormData({ ...formData, role: e.target.value })
-                                  validateField('role', e.target.value)
-                                }}
-                                className="sr-only"
-                              />
-                              {role.label}
-                            </label>
-                          ))}
-                        </div>
+                        <Select
+                          value={formData.role}
+                          onValueChange={(value) => {
+                            setSelectedRole(value)
+                            setFormData({ ...formData, role: value })
+                            validateField('role', value)
+                          }}
+                        >
+                          <SelectTrigger
+                            id="hero-role-select"
+                            className={`h-12 w-full border-white/10 bg-black/60 text-sm text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-14 ${formErrors.role ? 'border-red-500/50' : ''}`}
+                          >
+                            <SelectValue placeholder="Selecione seu cargo" />
+                          </SelectTrigger>
+                          <SelectContent className="border-blue-500/20 bg-black backdrop-blur-xl">
+                            <SelectItem value="owner">Dono / Sócio</SelectItem>
+                            <SelectItem value="manager">Gerente</SelectItem>
+                            <SelectItem value="employee">Vendedor CLT</SelectItem>
+                            <SelectItem value="autonomous">Autônomo</SelectItem>
+                          </SelectContent>
+                        </Select>
                         {formErrors.role && (
                           <p className="text-xs text-red-400">{formErrors.role}</p>
                         )}
                       </div>
 
-                      {/* Volume de Vendas + Budget */}
+                      {/* Volume de Vendas + Budget (Selects maiores) */}
                       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div className="space-y-1.5">
                           <Label
@@ -690,7 +681,7 @@ export default function Home() {
                           >
                             <SelectTrigger
                               id="hero-sales"
-                              className={`h-10 border-white/10 bg-black/60 text-sm text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-11 ${formErrors.salesVolume ? 'border-red-500/50' : ''}`}
+                              className={`h-12 w-full border-white/10 bg-black/60 text-sm text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-14 ${formErrors.salesVolume ? 'border-red-500/50' : ''}`}
                             >
                               <SelectValue placeholder="Selecione" />
                             </SelectTrigger>
@@ -722,7 +713,7 @@ export default function Home() {
                           >
                             <SelectTrigger
                               id="hero-budget"
-                              className={`h-10 border-white/10 bg-black/60 text-sm text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-11 ${formErrors.marketingBudget ? 'border-red-500/50' : ''}`}
+                              className={`h-12 w-full border-white/10 bg-black/60 text-sm text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 sm:h-14 ${formErrors.marketingBudget ? 'border-red-500/50' : ''}`}
                             >
                               <SelectValue placeholder="Selecione" />
                             </SelectTrigger>

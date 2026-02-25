@@ -8,6 +8,7 @@ import {
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import Script from 'next/script'
 import type React from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -111,9 +112,10 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="dark">
       <head>
-        {/* Microsoft Clarity */}
-        <script
-          type="text/javascript"
+        {/* Microsoft Clarity via next/script */}
+        <Script
+          id="clarity-script"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               (function(c,l,a,r,i,t,y){

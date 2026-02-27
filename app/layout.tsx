@@ -112,6 +112,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="dark">
       <head>
+        <meta name="facebook-domain-verification" content="k92enr46qpiqimjvaw4ut6wqwfy0w1" />
         {/* Microsoft Clarity via next/script */}
         <Script
           id="clarity-script"
